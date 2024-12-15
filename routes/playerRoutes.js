@@ -1,26 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Player = require('../models/player');
-
-// Create a new player
-router.post('/', async (req, res) => {
-  try {
-    const player = new Player(req.body);
-    await player.save();
-    res.status(201).json(player);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+const { getPlayers, createPlayer, updatePlayer, deletePlayer } = require('../controllers/playerController');
 
 // Get all players
-router.get('/', async (req, res) => {
-  try {
-    const players = await Player.find();
-    res.json(players);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+router.get('/', getPlayers);
+
+// Create a player
+router.post('/', createPlayer);
+
+// Update a player
+router.put('/:id', updatePlayer);
+
+// Delete a player
+router.delete('/:id', deletePlayer);
 
 module.exports = router;

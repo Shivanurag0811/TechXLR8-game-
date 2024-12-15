@@ -1,26 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Score = require('../models/score');
+const { getScores, createScore, updateScore, deleteScore } = require('../controllers/scoreController');
 
-// Add a new score
-router.post('/', async (req, res) => {
-  try {
-    const score = new Score(req.body);
-    await score.save();
-    res.status(201).json(score);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+// Get scores
+router.get('/', getScores);
 
-// Get all scores
-router.get('/', async (req, res) => {
-  try {
-    const scores = await Score.find().populate('playerId').populate('gameId');
-    res.json(scores);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// Create a score
+router.post('/', createScore);
+
+// Update a score
+router.put('/:id', updateScore);
+
+// Delete a score
+router.delete('/:id', deleteScore);
 
 module.exports = router;
